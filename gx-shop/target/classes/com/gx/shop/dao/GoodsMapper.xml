@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.shop.dao.GoodsMapper">
+
+<select id="list" resultType="com.gx.shop.domain.Goods">
+select b.*,GROUP_CONCAT(a.gname) gname FROM
+ goods a ,shop b, sc c WHERE a.gid=c.gid AND b.sid=c.sid 
+ <if test="sname != null and sname != ''">
+  and b.sname like '%${sname}%'
+ </if>
+ <if test="gids != null">
+  and a.gid in
+  <foreach collection="gids" item="gid" separator="," open="(" close=")">
+  #{gid}
+  </foreach>
+ </if> 
+ GROUP BY b.sid
+</select>
+
+<select id="glist" resultType="com.gx.shop.domain.Goods">
+select * from goods
+</select>
+</mapper>
